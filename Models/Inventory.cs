@@ -11,8 +11,15 @@ namespace Inventory_Management_System.Models
     {
         private readonly List<IProduct> _products;
 
-        void Iinventory.AddProduct(IProduct product)
+
+        public Inventory()
         {
+            _products = new List<IProduct>(); 
+        }
+
+        public void AddProduct(IProduct product)
+        {
+           
             _products.Add(product);
         }
 
