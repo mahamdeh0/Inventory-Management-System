@@ -26,6 +26,7 @@ namespace InventoryManagement.ConsoleApp
                         operations.AddProduct();
                         break;
                     case "2":
+                        operations.ViewAllProducts();
                         break;
                     case "3":
                         break;

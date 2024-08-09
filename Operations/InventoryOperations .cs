@@ -54,6 +54,28 @@ namespace Inventory_Management_System.Operations
             }
         }
 
+        public void ViewAllProducts()
+        {
+            try
+            {
+                var products = _inventory.GetAllProducts();
+                if (!products.Any())
+                {
+                    Console.WriteLine("No products in the inventory.");
+                }
+                else
+                {
+                    foreach (var product in products)
+                    {
+                        Console.WriteLine(product);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
 
         private decimal ReadDecimal(string Decimal)
         {
