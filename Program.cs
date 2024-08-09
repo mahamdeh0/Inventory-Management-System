@@ -35,6 +35,7 @@ namespace InventoryManagement.ConsoleApp
                         operations.DeleteProduct();
                         break;
                     case "5":
+                        operations.SearchProduct();
                         break;
                     case "6":
                         MenuDisplay.ShowExitMessage();
