@@ -162,6 +162,28 @@ namespace Inventory_Management_System.Operations
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
+        public void DeleteProduct()
+        {
+            try
+            {
+                Console.Write("Enter the name of the product to delete: ");
+                string name = Console.ReadLine();
+
+                var product = _inventory.GetProductByName(name);
+                if (product == null)
+                {
+                    Console.WriteLine("Product not found.");
+                    return;
+                }
+
+                _inventory.DeleteProduct(name);
+                Console.WriteLine("Product deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
 
         private decimal ReadDecimal(string Decimal)
         {

@@ -32,6 +32,7 @@ namespace InventoryManagement.ConsoleApp
                         operations.EditProduct();
                         break;
                     case "4":
+                        operations.DeleteProduct();
                         break;
                     case "5":
                         break;
