@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Inventory_Management_System.Operations;
+using System;
 
 namespace Inventory_Management_System.Utilities
 {
@@ -46,6 +43,50 @@ namespace Inventory_Management_System.Utilities
             Console.WriteLine("║      Thank you for using the system!   ║");
             Console.WriteLine("╚════════════════════════════════════════╝");
             Console.ResetColor();
+        }
+
+        public static void ShowReturnToMenuMessage()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("╔═════════════════════════════════════════════════╗");
+            Console.WriteLine("║ Press any key to return to the menu...          ║");
+            Console.WriteLine("╚═════════════════════════════════════════════════╝");
+            Console.ResetColor();
+            Console.ReadKey();
+        }
+
+        public static void HandleUserChoice(string choice, InventoryOperations operations, ref bool exit)
+        {
+            switch (choice)
+            {
+                case "1":
+                    operations.AddProduct();
+                    break;
+                case "2":
+                    operations.ViewAllProducts();
+                    break;
+                case "3":
+                    operations.EditProduct();
+                    break;
+                case "4":
+                    operations.DeleteProduct();
+                    break;
+                case "5":
+                    operations.SearchProduct();
+                    break;
+                case "6":
+                    ShowExitMessage();
+                    exit = true;
+                    break;
+                default:
+                    ShowInvalidInputMessage();
+                    break;
+            }
+
+            if (choice != "6")
+            {
+                ShowReturnToMenuMessage();
+            }
         }
     }
 }

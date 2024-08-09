@@ -19,42 +19,7 @@ namespace InventoryManagement.ConsoleApp
             {
                 MenuDisplay.ShowMenu();
                 string choice = Console.ReadLine();
-
-                switch (choice)
-                {
-                    case "1":
-                        operations.AddProduct();
-                        break;
-                    case "2":
-                        operations.ViewAllProducts();
-                        break;
-                    case "3":
-                        operations.EditProduct();
-                        break;
-                    case "4":
-                        operations.DeleteProduct();
-                        break;
-                    case "5":
-                        operations.SearchProduct();
-                        break;
-                    case "6":
-                        MenuDisplay.ShowExitMessage();
-                        exit = true;
-                        break;
-                    default:
-                        MenuDisplay.ShowInvalidInputMessage();
-                        break;
-                }
-
-                if (choice != "6") 
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("╔═════════════════════════════════════════════════╗");
-                    Console.WriteLine("║ Press any key to return to the menu...          ║");
-                    Console.WriteLine("╚═════════════════════════════════════════════════╝");
-                    Console.ResetColor();
-                    Console.ReadKey();
-                }
+                MenuDisplay.HandleUserChoice(choice, operations, ref exit);
             }
         }
     }
