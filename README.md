@@ -13,22 +13,16 @@ Welcome to the **Simple Inventory Management System**! This console-based applic
 
 ## Code Structure
 
-InventoryManagement/
-├── InventoryManagement/
-│   ├── Interfaces/
-│   │   ├── IProduct.cs
-│   │   ├── IInventory.cs
-│   ├── Models/
-│   │   ├── Product.cs
-│   │   ├── Inventory.cs
-│   ├── Operations/
-│   │   ├── InventoryOperations.cs
-│   ├── Utilities/
-│   │   ├── MenuDisplay.cs
-│   ├── Program.cs
-├── InventoryManagement.Tests/
-│   ├── ProductTests.cs
-│   ├── InventoryOperationsTests.cs
+- `InventoryManagement/`: Contains the main application code.
+  - `Interfaces/`: Defines interfaces for products and inventory.
+  - `Models/`: Contains classes representing products and inventory.
+  - `Operations/`: Implements business logic for inventory operations.
+  - `Utilities/`: Includes utility classes for menu display and other functionalities.
+  - `Program.cs`: Entry point of the application.
+
+- `InventoryManagement.Tests/`: Contains unit tests for the application.
+  - `ProductTests.cs`: Tests for the `Product` class.
+  - `InventoryOperationsTests.cs`: Tests for the `InventoryOperations` class.
 
 
 ## Unit Testing
