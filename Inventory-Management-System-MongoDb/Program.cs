@@ -1,18 +1,15 @@
-﻿using Inventory_Management_System.DataBaseConnection;
-using Inventory_Management_System.Models;
+﻿using Inventory_Management_System.Models;
 using Inventory_Management_System.Operations;
-using Inventory_Management_System.SqlServerDatabaseInitializer;
 using Inventory_Management_System.Utilities;
 
 namespace InventoryManagement.ConsoleApp
 {
     class Program
     {
-        static async Task Main(string[] args) 
+        static async Task Main(string[] args)
         {
-            new SqlServerDatabaseInitializer();
 
-            var inventory = new Inventory(DataBaseConnection.SqlServerConnectionString);
+            var inventory = new Inventory();
             InventoryOperations operations = new InventoryOperations(inventory);
 
             bool exit = false;

@@ -1,121 +1,81 @@
-﻿using Inventory_Management_System.Interfaces;
+﻿using Inventory_Management_System.DatabaseConnection;
+using Inventory_Management_System.Interfaces;
 using InventoryManagement.Core.Models;
-using Microsoft.Data.SqlClient;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace Inventory_Management_System.Models
 {
     public class Inventory : Iinventory
     {
-        private readonly string _connectionString;
+        private readonly IMongoCollection<BsonDocument> _productsCollection;
 
-        public Inventory(string connectionString)
+        public Inventory()
         {
-            _connectionString = connectionString;
+            var client = new MongoClient(MongoDBConnection.ConnectionString);
+            var database = client.GetDatabase(MongoDBConnection.DatabaseName);
+            _productsCollection = database.GetCollection<BsonDocument>("Products");
         }
 
         public async Task AddProduct(IProduct product)
         {
-            var query = "INSERT INTO Products (Name, Price, Quantity) VALUES (@Name, @Price, @Quantity)";
-
-            using (var connection = new SqlConnection(_connectionString))
+            var document = new BsonDocument
             {
-                await connection.OpenAsync();
-                using (var command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Name", product.Name);
-                    command.Parameters.AddWithValue("@Price", product.Price);
-                    command.Parameters.AddWithValue("@Quantity", product.Quantity);
-
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
+                { "Name", product.Name },
+                { "Price", product.Price },
+                { "Quantity", product.Quantity }
+            };
+            await _productsCollection.InsertOneAsync(document);
         }
 
         public async Task<List<IProduct>> GetAllProducts()
         {
-            var query = "SELECT * FROM Products";
             var products = new List<IProduct>();
+            var documents = await _productsCollection.Find(new BsonDocument()).ToListAsync();
 
-            using (var connection = new SqlConnection(_connectionString))
+            foreach (var doc in documents)
             {
-                await connection.OpenAsync();
-                using (var command = new SqlCommand(query, connection))
-                {
-                    using (var reader = await command.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            products.Add(new Product(
-                                reader["Name"].ToString(),
-                                (decimal)reader["Price"],
-                                (int)reader["Quantity"]
-                            ));
-                        }
-                    }
-                }
+                products.Add(new Product(
+                    doc["Name"].AsString,
+                    doc["Price"].AsDecimal,
+                    doc["Quantity"].AsInt32
+                ));
             }
 
             return products;
         }
 
+        public async Task<IProduct> GetProductByName(string productName)
+        {
+            var filter = Builders<BsonDocument>.Filter.Eq("Name", productName);
+            var document = await _productsCollection.Find(filter).FirstOrDefaultAsync();
+
+            if (document != null)
+            {
+                return new Product(
+                    document["Name"].AsString,
+                    document["Price"].AsDecimal,
+                    document["Quantity"].AsInt32
+                );
+            }
+
+            return null;
+        }
+
         public async Task UpdateProduct(IProduct product)
         {
-            var query = "UPDATE Products SET Price = @Price, Quantity = @Quantity WHERE Name = @Name";
+            var filter = Builders<BsonDocument>.Filter.Eq("Name", product.Name);
+            var update = Builders<BsonDocument>.Update
+                .Set("Price", product.Price)
+                .Set("Quantity", product.Quantity);
 
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                using (var command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Name", product.Name);
-                    command.Parameters.AddWithValue("@Price", product.Price);
-                    command.Parameters.AddWithValue("@Quantity", product.Quantity);
-
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
+            await _productsCollection.UpdateOneAsync(filter, update);
         }
 
         public async Task DeleteProduct(string productName)
         {
-            var query = "DELETE FROM Products WHERE Name = @Name";
-
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                using (var command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Name", productName);
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
+            var filter = Builders<BsonDocument>.Filter.Eq("Name", productName);
+            await _productsCollection.DeleteOneAsync(filter);
         }
-
-        public async Task<IProduct> GetProductByName(string productName)
-        {
-            var query = "SELECT * FROM Products WHERE Name = @Name";
-
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                using (var command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Name", productName);
-                    using (var reader = await command.ExecuteReaderAsync())
-                    {
-                        if (await reader.ReadAsync())
-                        {
-                            return new Product(
-                                reader["Name"].ToString(),
-                                (decimal)reader["Price"],
-                                (int)reader["Quantity"]
-                            );
-                        }
-                        return null;
-                    }
-                }
-            }
-        }
-
     }
 }
