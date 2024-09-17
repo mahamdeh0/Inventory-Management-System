@@ -1,10 +1,5 @@
 ﻿using Inventory_Management_System.Interfaces;
 using InventoryManagement.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Inventory_Management_System.Operations
 {
@@ -18,7 +13,7 @@ namespace Inventory_Management_System.Operations
             _inventory = inventory;
         }
 
-        public void AddProduct()
+        public async Task AddProduct()
         {
             try
             {
@@ -45,7 +40,7 @@ namespace Inventory_Management_System.Operations
                 }
 
                 IProduct product = new Product(name, price, quantity);
-                _inventory.AddProduct(product);
+                await _inventory.AddProduct(product);
                 Console.WriteLine("Product added successfully.");
             }
             catch (Exception ex)
@@ -54,11 +49,11 @@ namespace Inventory_Management_System.Operations
             }
         }
 
-        public void ViewAllProducts()
+        public async Task ViewAllProducts()
         {
             try
             {
-                var products = _inventory.GetAllProducts();
+                var products = await _inventory.GetAllProducts();
                 if (!products.Any())
                 {
                     Console.WriteLine("No products in the inventory.");
@@ -77,13 +72,13 @@ namespace Inventory_Management_System.Operations
             }
         }
 
-        public void EditProduct()
+        public async Task EditProduct()
         {
             try
             {
                 Console.Write("Enter the name of the product to edit: ");
                 string name = Console.ReadLine();
-                var product = _inventory.GetProductByName(name);
+                var product = await _inventory.GetProductByName(name);
 
                 if (product == null)
                 {
@@ -162,14 +157,15 @@ namespace Inventory_Management_System.Operations
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
-        public void DeleteProduct()
+
+        public async Task DeleteProduct()
         {
             try
             {
                 Console.Write("Enter the name of the product to delete: ");
                 string name = Console.ReadLine();
 
-                var product = _inventory.GetProductByName(name);
+                var product = await _inventory.GetProductByName(name);
                 if (product == null)
                 {
                     Console.WriteLine("Product not found.");
@@ -185,13 +181,13 @@ namespace Inventory_Management_System.Operations
             }
         }
 
-        public void SearchProduct()
+        public async Task SearchProduct()
         {
             try
             {
                 Console.Write("Enter the name of the product to search: ");
                 string name = Console.ReadLine();
-                var product = _inventory.GetProductByName(name);
+                var product = await _inventory.GetProductByName(name);
                 if (product == null)
                 {
                     Console.WriteLine("Product not found.");

@@ -1,7 +1,4 @@
-﻿using Inventory_Management_System.Operations;
-using System;
-
-namespace Inventory_Management_System.Utilities
+﻿namespace Inventory_Management_System.Utilities
 {
     public class MenuDisplay
     {
@@ -55,38 +52,6 @@ namespace Inventory_Management_System.Utilities
             Console.ReadKey();
         }
 
-        public static void HandleUserChoice(string choice, InventoryOperations operations, ref bool exit)
-        {
-            switch (choice)
-            {
-                case "1":
-                    operations.AddProduct();
-                    break;
-                case "2":
-                    operations.ViewAllProducts();
-                    break;
-                case "3":
-                    operations.EditProduct();
-                    break;
-                case "4":
-                    operations.DeleteProduct();
-                    break;
-                case "5":
-                    operations.SearchProduct();
-                    break;
-                case "6":
-                    ShowExitMessage();
-                    exit = true;
-                    break;
-                default:
-                    ShowInvalidInputMessage();
-                    break;
-            }
 
-            if (choice != "6")
-            {
-                ShowReturnToMenuMessage();
-            }
-        }
     }
 }
