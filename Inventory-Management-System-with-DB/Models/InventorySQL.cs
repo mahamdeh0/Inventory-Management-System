@@ -4,11 +4,11 @@ using Microsoft.Data.SqlClient;
 
 namespace Inventory_Management_System.Models
 {
-    public class Inventory : Iinventory
+    public class InventorySQL : Iinventory
     {
         private readonly string _connectionString;
 
-        public Inventory(string connectionString)
+        public InventorySQL(string connectionString)
         {
             _connectionString = connectionString;
         }

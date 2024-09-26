@@ -6,11 +6,11 @@ using MongoDB.Driver;
 
 namespace Inventory_Management_System.Models
 {
-    public class Inventory : Iinventory
+    public class InventoryMongoDB : Iinventory
     {
         private readonly IMongoCollection<BsonDocument> _productsCollection;
 
-        public Inventory()
+        public InventoryMongoDB()
         {
             var client = new MongoClient(MongoDBConnection.ConnectionString);
             var database = client.GetDatabase(MongoDBConnection.DatabaseName);
