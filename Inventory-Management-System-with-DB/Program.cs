@@ -7,7 +7,7 @@ using Inventory_Management_System.Utilities;
 
 namespace InventoryManagement.ConsoleApp
 {
-    class Program_SQL
+    class Program
     {
         static async Task Main(string[] args)
         {
