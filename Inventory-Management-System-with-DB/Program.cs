@@ -1,4 +1,5 @@
 ﻿using Inventory_Management_System.DataBaseConnection;
+using Inventory_Management_System.Interfaces;
 using Inventory_Management_System.Models;
 using Inventory_Management_System.Operations;
 using Inventory_Management_System.SqlServerDatabaseInitializer;
@@ -8,11 +9,29 @@ namespace InventoryManagement.ConsoleApp
 {
     class Program
     {
-        static async Task Main(string[] args) 
+        static async Task Main(string[] args)
         {
-            new SqlServerDatabaseInitializer();
 
-            var inventory = new Inventory(DataBaseConnection.SqlServerConnectionString);
+            Iinventory inventory;
+
+            Console.WriteLine("Select Inventory Type: 1. SQL  2. MongoDB");
+            string inventoryChoice = Console.ReadLine();
+
+            switch (inventoryChoice)
+            {
+                case "1":
+                    var sqlInitializer = new SqlServerDatabaseInitializer();
+                    inventory = new InventorySQL(DataBaseConnection.SqlServerConnectionString);
+                    break;
+                case "2":
+                    inventory = new InventoryMongoDB();
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Defaulting to SQL Inventory.");
+                    inventory = new InventorySQL(DataBaseConnection.SqlServerConnectionString);
+                    break;
+            }
+
             InventoryOperations operations = new InventoryOperations(inventory);
 
             bool exit = false;
@@ -46,7 +65,7 @@ namespace InventoryManagement.ConsoleApp
                         break;
                 }
 
-                if (choice != "6")
+                if (!exit)
                 {
                     MenuDisplay.ShowReturnToMenuMessage();
                 }
